@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}حركة الصندوق{% endblock %}
+{% block content %}
+<h3>حركة الصندوق</h3>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-striped mb-0">
+      <thead><tr><th>التاريخ</th><th>العملة</th><th>مقبوضات</th><th>مدفوعات</th><th>الرصيد بعد</th></tr></thead>
+      <tbody>
+        {% for r in rows %}
+          <tr>
+            <td>{{ r.date.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ r.currency.code if r.currency else '-' }}</td>
+            <td>{{ '{:,.2f}'.format(r.inflow or 0) }}</td>
+            <td>{{ '{:,.2f}'.format(r.outflow or 0) }}</td>
+            <td>{{ '{:,.2f}'.format(r.balance_after or 0) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

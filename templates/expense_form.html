@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}تسجيل مصروف{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5>تسجيل مصروف</h5>
+      <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">{{ form.date.label }}{{ form.date(class_='form-control') }}</div>
+        <div class="mb-3">{{ form.category.label }}{{ form.category(class_='form-control') }}</div>
+        <div class="mb-3">{{ form.amount.label }}{{ form.amount(class_='form-control') }}</div>
+        <div class="mb-3">{{ form.currency_id.label }}{{ form.currency_id(class_='form-control') }}</div>
+        <div class="mb-3">{{ form.notes.label }}{{ form.notes(class_='form-control') }}</div>
+        <div class="d-grid">{{ form.submit(class_='btn btn-primary') }}</div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

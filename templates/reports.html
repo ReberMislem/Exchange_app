@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block title %}التقارير{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="mb-0">تقارير مالية</h3>
+  <div class="btn-group">
+    <a class="btn btn-sm btn-outline-primary" href="/reports/export/transactions.xlsx">
+      <i class="bi bi-file-earmark-spreadsheet"></i> تصدير معاملات (Excel)
+    </a>
+    <a class="btn btn-sm btn-outline-primary" href="/reports/export/expenses.xlsx">
+      <i class="bi bi-file-earmark-spreadsheet"></i> تصدير مصاريف (Excel)
+    </a>
+    <a class="btn btn-sm btn-outline-secondary" href="/reports/export/summary.pdf">
+      <i class="bi bi-file-pdf"></i> تصدير ملخص (PDF)
+    </a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card stat-card success">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-graph-up-arrow stat-icon"></i>
+          <div class="ms-auto text-end">
+            <div class="small text-muted">اجمالي الربح</div>
+            <div class="h4 mb-0">{{ total_profit|currency_fmt }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card stat-card warning">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-receipt stat-icon"></i>
+          <div class="ms-auto text-end">
+            <div class="small text-muted">اجمالي المصاريف</div>
+            <div class="h4 mb-0">{{ total_expenses|currency_fmt }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card stat-card info">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-cash-stack stat-icon"></i>
+          <div class="ms-auto text-end">
+            <div class="small text-muted">صافي الربح</div>
+            <div class="h4 mb-0">{{ (total_profit - total_expenses)|currency_fmt }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mt-2">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h6 class="mb-0">أحدث العمليات</h6>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>التاريخ</th>
+                <th>النوع</th>
+                <th>العملة</th>
+                <th>الربح</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for tx in txs[:5] %}
+              <tr>
+                <td>{{ tx.date.strftime('%Y-%m-%d') }}</td>
+                <td>
+                  {% if tx.type == 'buy' %}
+                  <span class="badge bg-info">شراء</span>
+                  {% else %}
+                  <span class="badge bg-success">بيع</span>
+                  {% endif %}
+                </td>
+                <td>{{ tx.currency.code if tx.currency else '-' }}</td>
+                <td class="{% if tx.profit > 0 %}text-success{% else %}text-danger{% endif %}">
+                  {{ '{:,.2f}'.format(tx.profit or 0) }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h6 class="mb-0">أحدث المصاريف</h6>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>التاريخ</th>
+                <th>التصنيف</th>
+                <th>المبلغ</th>
+                <th>العملة</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for e in exps[:5] %}
+              <tr>
+                <td>{{ e.date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ e.category }}</td>
+                <td>{{ '{:,.2f}'.format(e.amount) }}</td>
+                <td>{{ e.currency.code if e.currency else '' }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mt-2">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h6 class="mb-0">نظرة عامة على الأرصدة</h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          {% for code, balance in balances.items() %}
+          <div class="col-md-3 col-6 mb-3">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="small text-muted">{{ code }}</div>
+              <div class="h5 mb-0">{{ balance|currency_fmt }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

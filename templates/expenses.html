@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}المصاريف{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">المصاريف</h3>
+  <a class="btn btn-sm btn-success" href="/expense/add">تسجيل مصروف</a>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-striped mb-0">
+      <thead><tr><th>التاريخ</th><th>الفئة</th><th>المبلغ</th><th>العملة</th><th>ملاحظات</th></tr></thead>
+      <tbody>
+        {% for r in rows %}
+          <tr>
+            <td>{{ r.date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ r.category }}</td>
+            <td>{{ '{:,.2f}'.format(r.amount) }}</td>
+            <td>{{ r.currency.code if r.currency else '-' }}</td>
+            <td>{{ r.notes or '' }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block title %}لوحة التحكم{% endblock %}
+{% block content %}
+<div class="row g-4 mb-4 animate-on-scroll">
+  <div class="col-12 col-md-3">
+    <div class="card stat-card bounce-in">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-currency-exchange stat-icon"></i>
+          <div class="ms-auto text-end">
+            <div class="small text-muted">عدد العملات</div>
+            <div class="h4 mb-0">{{ total_currencies }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-3">
+    <div class="card stat-card  bounce-in">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-graph-up-arrow stat-icon"></i>
+          <div class="ms-auto text-end">
+            <div class="small text-muted">اجمالي الربح</div>
+            <div class="h4 mb-0">{{ total_profit|currency_fmt }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-3">
+    <div class="card stat-card  bounce-in">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-receipt stat-icon"></i>
+          <div class="ms-auto text-end">
+            <div class="small text-muted">اجمالي المصاريف</div>
+            <div class="h4 mb-0">{{ total_expenses|currency_fmt }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-3">
+    <div class="card stat-card  bounce-in">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-wallet2 stat-icon"></i>
+          <div class="ms-auto text-end">
+            <div class="small text-muted">صافي الربح</div>
+            <div class="h4 mb-0">{{ (total_profit - total_expenses)|currency_fmt }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 animate-on-scroll">
+  <div class="col-12 col-md-8">
+    <div class="card slide-in-left">
+      <div class="card-header">
+        <h6 class="mb-0">آخر العمليات</h6>
+      </div>
+      <div class="card-body p-0">
+        {% if latest_tx %}
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>التاريخ</th>
+                <th>النوع</th>
+                <th>العملة</th>
+                <th>الكمية</th>
+                <th>الربح</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for tx in latest_tx %}
+              <tr class="animate-on-scroll">
+                <td>{{ tx.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                  {% if tx.type == 'buy' %}
+                  <span class="badge bg-info">شراء</span>
+                  {% else %}
+                  <span class="badge bg-success">بيع</span>
+                  {% endif %}
+                </td>
+                <td>{{ tx.currency.code if tx.currency else '-' }}</td>
+                <td>{{ '{:,.2f}'.format(tx.quantity) }}</td>
+                <td class="{% if tx.profit > 0 %}text-success{% else %}text-danger{% endif %}">
+                  {{ '{:,.2f}'.format(tx.profit or 0) }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+          <i class="bi bi-arrow-left-right fs-1 text-muted mb-3"></i>
+          <h6 class="text-muted">لا توجد عمليات مسجلة</h6>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-4">
+    <div class="card slide-in-right">
+      <div class="card-header">
+        <h6 class="mb-0">عمليات سريعة</h6>
+      </div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a class="btn btn-primary bounce-in" href="/transaction/add">
+            <i class="bi bi-plus-lg"></i> تسجيل عملية جديدة
+          </a>
+          <a class="btn btn-success bounce-in" href="/expense/add">
+            <i class="bi bi-wallet2"></i> تسجيل مصروف
+          </a>
+          <a class="btn btn-info bounce-in" href="/debt/add">
+            <i class="bi bi-wallet2"></i> تسجيل دين
+          </a>
+          <a class="btn btn-outline-secondary bounce-in" href="/reports">
+            <i class="bi bi-file-earmark-text"></i> عرض التقارير
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card mt-4 slide-in-right">
+      <div class="card-header">
+        <h6 class="mb-0">أرصدة العملات</h6>
+      </div>
+      <div class="card-body">
+        {% if balances %}
+        <div class="row">
+          {% for code, balance in balances.items() %}
+          <div class="col-6 mb-2 animate-on-scroll">
+            <div class="d-flex justify-content-between">
+              <span class="small">{{ code }}</span>
+              <span class="small fw-semibold">{{ balance|currency_fmt }}</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-3">
+          <i class="bi bi-cash-stack fs-3 text-muted"></i>
+          <p class="small text-muted mt-2 mb-0">لا توجد أرصدة متوفرة</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

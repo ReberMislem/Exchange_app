@@ -1,0 +1,54 @@
+.brand{
+  font-weight:800;
+  font-size:1.2rem;
+  color:var(--primary);
+  letter-spacing: -0.5px;
+  font-family: 'Dubai', 'Tajawal', sans-serif;
+}
+
+.sidebar .nav-item{
+  padding:8px 12px;
+}
+
+.sidebar .nav-item .bi{
+  margin-inline-start:8px;
+  font-size: 1.1rem;
+}
+
+.sidebar .nav-link{
+  margin-bottom: 0.3rem;
+  font-family: 'Dubai', 'Tajawal', sans-serif;
+  font-weight: 700; /* Bold font as requested */
+}
+
+.user-details .username{
+  font-weight: 600;
+  font-family: 'Dubai', 'Tajawal', sans-serif;
+}
+
+.user-details .role{
+  font-size: 0.75rem;
+  font-family: 'Dubai', 'Tajawal', sans-serif;
+}
+
+/* Enhanced theme styles */
+.theme-transition {
+  transition: all 0.3s ease !important;
+}
+
+/* Additional color enhancements */
+.bg-primary-gradient {
+  background: var(--primary-gradient) !important;
+}
+
+.bg-success-gradient {
+  background: var(--success-gradient) !important;
+}
+
+.bg-warning-gradient {
+  background: var(--warning-gradient) !important;
+}
+
+.bg-danger-gradient {
+  background: var(--danger-gradient) !important;
+}

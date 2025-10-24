@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'تعديل مستخدم' if user else 'إضافة مستخدم' }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center animate-on-scroll">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card slide-in-right">
+      <div class="card-header">
+        <h5 class="mb-0">{{ 'تعديل مستخدم' if user else 'إضافة مستخدم' }}</h5>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {{ form.hidden_tag() }}
+          
+          <div class="mb-3">
+            {{ form.username.label(class_='form-label') }}
+            {{ form.username(class_='form-control') }}
+            {% if form.username.errors %}
+              <div class="text-danger small mt-1">
+                {% for error in form.username.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="mb-3">
+            {{ form.password.label(class_='form-label') }}
+            {{ form.password(class_='form-control', placeholder='اتركه فارغاً للحفاظ على كلمة المرور الحالية' if user else 'أدخل كلمة المرور') }}
+            {% if form.password.errors %}
+              <div class="text-danger small mt-1">
+                {% for error in form.password.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="mb-3">
+            {{ form.role.label(class_='form-label') }}
+            {{ form.role(class_='form-select') }}
+            {% if form.role.errors %}
+              <div class="text-danger small mt-1">
+                {% for error in form.role.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="d-flex justify-content-between">
+            <a href="/users" class="btn btn-secondary">إلغاء</a>
+            {{ form.submit(class_='btn btn-primary') }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

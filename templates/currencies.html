@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}العملات{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 animate-on-scroll">
+  <h3 class="mb-0">العملات</h3>
+  <a class="btn btn-sm btn-success bounce-in" href="/currency/add">إضافة عملة</a>
+</div>
+<div class="card slide-in-left">
+  <div class="table-responsive">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>الرمز</th>
+          <th>الاسم</th>
+          <th>السعر</th>
+          <th>آخر تحديث</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in currencies %}
+          <tr class="animate-on-scroll">
+            <td>{{ c.code }}</td>
+            <td>{{ c.name }}</td>
+            <td>{{ '{:,.2f}'.format(c.rate) }}</td>
+            <td>{{ c.last_update.strftime('%Y-%m-%d') }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

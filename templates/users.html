@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}إدارة المستخدمين{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 animate-on-scroll">
+  <h3 class="mb-0">إدارة المستخدمين</h3>
+  <a class="btn btn-sm btn-success bounce-in" href="/user/add">إضافة مستخدم</a>
+</div>
+
+<div class="card slide-in-left">
+  <div class="table-responsive">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>اسم المستخدم</th>
+          <th>الدور</th>
+          <th>الإجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr class="animate-on-scroll">
+          <td>{{ user.username }}</td>
+          <td>
+            {% if user.role == 'admin' %}
+              <span class="badge bg-danger">مدير</span>
+            {% elif user.role == 'editor' %}
+              <span class="badge bg-primary">محرر</span>
+            {% else %}
+              <span class="badge bg-secondary">عارض</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="/user/edit/{{ user.id }}" class="btn btn-sm btn-outline-primary">تعديل</a>
+            {% if user.id != current_user.id %}
+            <form method="POST" action="/user/delete/{{ user.id }}" class="d-inline" onsubmit="return confirm('هل أنت متأكد من حذف هذا المستخدم؟')">
+              <button type="submit" class="btn btn-sm btn-outline-danger">حذف</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

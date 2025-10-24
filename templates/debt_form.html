@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'تعديل الدين' if debt else 'إضافة دين' }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">{{ 'تعديل الدين' if debt else 'إضافة دين جديد' }}</h5>
+      </div>
+      <div class="card-body">
+        <form method="POST">
+          {{ form.hidden_tag() }}
+          
+          <div class="mb-3">
+            {{ form.person_name.label(class="form-label") }}
+            {{ form.person_name(class="form-control") }}
+            {% if form.person_name.errors %}
+              <div class="text-danger small mt-1">
+                {% for error in form.person_name.errors %}{{ error }}{% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                {{ form.amount.label(class="form-label") }}
+                {{ form.amount(class="form-control") }}
+                {% if form.amount.errors %}
+                  <div class="text-danger small mt-1">
+                    {% for error in form.amount.errors %}{{ error }}{% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                {{ form.currency_id.label(class="form-label") }}
+                {{ form.currency_id(class="form-select") }}
+                {% if form.currency_id.errors %}
+                  <div class="text-danger small mt-1">
+                    {% for error in form.currency_id.errors %}{{ error }}{% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                {{ form.due_date.label(class="form-label") }}
+                {{ form.due_date(class="form-control") }}
+                {% if form.due_date.errors %}
+                  <div class="text-danger small mt-1">
+                    {% for error in form.due_date.errors %}{{ error }}{% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3 pt-4">
+                <div class="form-check mt-2">
+                  {{ form.is_paid(class="form-check-input") }}
+                  {{ form.is_paid.label(class="form-check-label") }}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            {{ form.notes.label(class="form-label") }}
+            {{ form.notes(class="form-control", rows="3") }}
+            {% if form.notes.errors %}
+              <div class="text-danger small mt-1">
+                {% for error in form.notes.errors %}{{ error }}{% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="d-flex justify-content-between">
+            <a href="/debts" class="btn btn-secondary">
+              <i class="bi bi-arrow-right"></i> رجوع
+            </a>
+            {{ form.submit(class="btn btn-primary") }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
